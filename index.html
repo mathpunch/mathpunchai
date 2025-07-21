@@ -37,16 +37,6 @@
             100% {background-position: 0% 50%;}
         }
 
-        /* Subtle animated SVG blobs for depth */
-        .blob-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.17;
-            filter: blur(18px) saturate(140%);
-        }
-
         .container {
             display: flex;
             flex-direction: column;
@@ -63,7 +53,7 @@
             text-align: center;
             color: #f3f6fa;
             letter-spacing: 2px;
-            text-shadow: 0 2px 40px #000b  ;
+            text-shadow: 0 2px 40px #000b;
         }
 
         #chatContainer {
@@ -242,30 +232,6 @@
     </style>
 </head>
 <body>
-    <!-- Animated SVG blobs for dark accent -->
-    <svg class="blob-bg" viewBox="0 0 800 600" width="100%" height="100%" preserveAspectRatio="none">
-        <defs>
-            <linearGradient id="blobGrad1" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#1770fa" />
-                <stop offset="100%" stop-color="#5ee3ff" />
-            </linearGradient>
-            <linearGradient id="blobGrad2" x1="1" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#10141a" />
-                <stop offset="100%" stop-color="#23243a" />
-            </linearGradient>
-        </defs>
-        <g>
-            <ellipse cx="230" cy="120" rx="180" ry="95" fill="url(#blobGrad1)">
-                <animate attributeName="cx" values="230;260;230" dur="8s" repeatCount="indefinite"/>
-                <animate attributeName="cy" values="120;140;120" dur="10s" repeatCount="indefinite"/>
-            </ellipse>
-            <ellipse cx="620" cy="500" rx="160" ry="90" fill="url(#blobGrad2)">
-                <animate attributeName="cx" values="620;640;620" dur="11s" repeatCount="indefinite"/>
-                <animate attributeName="cy" values="500;530;500" dur="13s" repeatCount="indefinite"/>
-            </ellipse>
-        </g>
-    </svg>
-
     <div id="popup">
         <div id="popupContent">
             <p>Welcome to <b>mathpunch AI</b>!</p>
