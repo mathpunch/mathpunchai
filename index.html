@@ -8,11 +8,19 @@
     <style>
         body {
             font-family: 'Inter', 'Roboto', Arial, sans-serif;
-            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            /* Animated Gradient Background */
+            background: linear-gradient(-45deg, #232526, #8ec5fc, #e0c3fc, #414345);
+            background-size: 400% 400%;
+            animation: gradientBG 14s ease-in-out infinite;
             color: #f7f9fa;
             margin: 0;
             padding: 0;
             min-height: 100vh;
+        }
+        @keyframes gradientBG {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
         }
 
         .container {
@@ -137,7 +145,6 @@
             margin-top: 16px;
         }
 
-        /* Popup styling */
         #popup {
             display: none;
             position: fixed;
