@@ -4,18 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mathpunch AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Manrope:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
         body {
-            font-family: 'Inter', 'Roboto', Arial, sans-serif;
-            /* Animated Gradient Background */
-            background: linear-gradient(-45deg, #232526, #8ec5fc, #e0c3fc, #414345);
-            background-size: 400% 400%;
-            animation: gradientBG 14s ease-in-out infinite;
+            font-family: 'Inter', 'Manrope', Arial, sans-serif;
+            min-height: 100vh;
             color: #f7f9fa;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            background: linear-gradient(120deg, #232526 0%, #8ec5fc 40%, #e0c3fc 80%, #414345 100%);
+            background-size: 200% 200%;
+            animation: gradientBG 15s ease-in-out infinite;
         }
         @keyframes gradientBG {
             0% {background-position: 0% 50%;}
@@ -23,194 +37,230 @@
             100% {background-position: 0% 50%;}
         }
 
+        /* Floating blob SVG overlay */
+        .blob-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.33;
+            filter: blur(8px) saturate(120%);
+        }
+
         .container {
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
             align-items: center;
-            height: 100vh;
+            justify-content: flex-end;
+            min-height: 100vh;
             padding: 24px 10px 10px 10px;
         }
 
         h1 {
             margin-bottom: 8px;
-            font-size: 2.6rem;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-size: 2.8rem;
+            font-weight: 700;
             text-align: center;
             color: #fff;
-            text-shadow: 0 2px 16px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 32px rgba(0,0,0,0.15);
+            letter-spacing: 1px;
         }
 
         #chatContainer {
             width: 100%;
-            max-width: 540px;
-            height: 60vh;
+            max-width: 550px;
+            min-height: 240px;
+            height: 57vh;
             overflow-y: auto;
-            padding: 24px 18px;
-            background: rgba(34, 40, 49, 0.65);
-            border-radius: 22px;
-            box-shadow: 0 6px 32px 0 rgba(0,0,0,0.23);
-            border: 1.5px solid rgba(255,255,255,0.07);
-            backdrop-filter: blur(7px);
+            padding: 28px 18px 24px 18px;
+            background: rgba(36,44,58,0.60);
+            border-radius: 30px;
+            box-shadow: 0 12px 48px 0 rgba(24,28,37,0.21);
+            border: 1.5px solid rgba(255,255,255,0.09);
+            backdrop-filter: blur(16px) saturate(140%);
             margin-bottom: 24px;
             transition: box-shadow 0.2s;
         }
 
         .message {
-            margin-bottom: 16px;
-            font-size: 1.08rem;
-            line-height: 1.6;
+            margin-bottom: 19px;
+            font-size: 1.11rem;
+            line-height: 1.68;
             word-break: break-word;
             display: flex;
         }
-
-        .user {
-            justify-content: flex-end;
-        }
-
-        .ai {
-            justify-content: flex-start;
-        }
+        .user { justify-content: flex-end; }
+        .ai { justify-content: flex-start; }
 
         .message.user div,
         .message.ai div {
             max-width: 76%;
-            padding: 13px 18px;
-            border-radius: 18px;
-            box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);
+            padding: 14px 20px;
+            border-radius: 18px 18px 16px 5px;
+            box-shadow: 0 2px 16px 0 rgba(0,0,0,0.09);
             font-weight: 400;
             white-space: pre-wrap;
+            font-family: 'Manrope', 'Inter', sans-serif;
+            transition: background 0.3s;
         }
-
         .message.user div {
-            background: linear-gradient(135deg, #8ec5fc 0%, #e0c3fc 100%);
-            color: #232526;
-            align-self: flex-end;
+            background: linear-gradient(120deg, #b5fffc 0%, #f3d6ff 100%);
+            color: #2b2b2b;
             border-bottom-right-radius: 4px;
+            align-self: flex-end;
         }
-
         .message.ai div {
-            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            background: linear-gradient(120deg, #353b48 0%, #7f7fd5 100%);
             color: #f7f9fa;
-            align-self: flex-start;
             border-bottom-left-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            align-self: flex-start;
         }
 
         #userInput {
             width: 100%;
-            max-width: 540px;
-            min-height: 48px;
-            max-height: 120px;
-            padding: 13px 18px;
-            font-size: 1.1rem;
-            background: rgba(255,255,255,0.12);
+            max-width: 550px;
+            min-height: 52px;
+            max-height: 140px;
+            padding: 16px 18px;
+            font-size: 1.13rem;
+            background: rgba(255,255,255,0.13);
             color: #f7f9fa;
-            border: 1.5px solid rgba(255,255,255,0.13);
-            border-radius: 16px;
+            border: 1.5px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
             margin-bottom: 10px;
             resize: vertical;
             outline: none;
-            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
-            transition: border 0.2s;
+            box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10);
+            transition: border 0.2s, background 0.2s;
         }
         #userInput:focus {
             border: 1.5px solid #8ec5fc;
+            background: rgba(255,255,255,0.22);
         }
 
         button {
-            padding: 13px 34px;
-            font-size: 1.13rem;
-            font-weight: 600;
+            padding: 14px 36px;
+            font-size: 1.14rem;
+            font-weight: 700;
             cursor: pointer;
-            background: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
+            background: linear-gradient(135deg, #7f7fd5 0%, #86a8e7 60%, #91eac9 100%);
             color: #fff;
             border: none;
-            border-radius: 16px;
+            border-radius: 18px;
             margin: 0 6px;
-            box-shadow: 0 2px 12px 0 rgba(248,87,166,0.15);
-            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 14px 0 rgba(143,188,255,0.11);
+            transition: background 0.19s, box-shadow 0.19s, color 0.19s;
+            letter-spacing: 0.01em;
         }
-        button:hover {
-            background: linear-gradient(135deg, #ff5858 0%, #f857a6 100%);
-            box-shadow: 0 4px 18px 0 rgba(248,87,166,0.22);
+        button:hover, button:focus {
+            background: linear-gradient(135deg, #86a8e7 0%, #7f7fd5 80%);
+            color: #f3d6ff;
+            box-shadow: 0 4px 24px 0 rgba(143,188,255,0.22);
+            outline: none;
         }
 
         .top-button-row {
             display: flex;
             justify-content: center;
             width: 100%;
-            margin-bottom: 32px;
+            margin-bottom: 34px;
             margin-top: 16px;
+            gap: 8px;
         }
 
+        /* Popup styling */
         #popup {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(34, 40, 49, 0.75);
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(34, 40, 49, 0.78);
             color: white;
             justify-content: center;
             align-items: center;
             z-index: 9999;
             transition: background 0.2s;
+            backdrop-filter: blur(2.5px);
         }
         #popupContent {
-            background: rgba(34, 40, 49, 0.95);
-            padding: 34px 20px;
-            border-radius: 22px;
+            background: rgba(34, 40, 49, 0.98);
+            padding: 36px 24px 32px 24px;
+            border-radius: 28px;
             text-align: center;
-            font-size: 1.16rem;
+            font-size: 1.23rem;
             width: 84%;
-            max-width: 500px;
-            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.32);
+            max-width: 520px;
+            box-shadow: 0 10px 32px 0 rgba(0,0,0,0.32);
         }
         #popup button {
             background: linear-gradient(135deg, #8ec5fc 0%, #e0c3fc 100%);
             color: #232526;
             border: none;
-            padding: 12px 26px;
-            border-radius: 12px;
-            font-size: 1rem;
+            padding: 13px 30px;
+            border-radius: 14px;
+            font-size: 1.07rem;
             font-weight: 600;
-            margin-top: 22px;
+            margin-top: 28px;
             cursor: pointer;
+            box-shadow: 0 2px 10px 0 rgba(143,188,255,0.10);
         }
         #popup button:hover {
             background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
         }
 
+        /* Scrollbar styling */
+        #chatContainer::-webkit-scrollbar {
+            width: 8px;
+            background: transparent;
+        }
+        #chatContainer::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.09);
+            border-radius: 5px;
+        }
+
         @media (max-width: 700px) {
-            .container, #chatContainer, #userInput {
-                max-width: 99vw;
-            }
-            #chatContainer {
-                padding: 18px 3vw;
-            }
+            .container, #chatContainer, #userInput { max-width: 99vw; }
+            #chatContainer { padding: 18px 4vw; }
         }
         @media (max-width: 480px) {
-            h1 {
-                font-size: 2rem;
-            }
+            h1 { font-size: 2.04rem; }
             #chatContainer {
-                min-height: 320px;
+                min-height: 180px;
                 padding: 7vw 2vw;
             }
             button, #popup button {
                 font-size: 1rem;
                 padding: 11px 14px;
             }
-            #userInput {
-                font-size: 1rem;
-            }
+            #userInput { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
+    <!-- Floating animated SVG blobs for extra modern feel -->
+    <svg class="blob-bg" viewBox="0 0 800 600" width="100%" height="100%" preserveAspectRatio="none">
+        <defs>
+            <linearGradient id="blobGrad1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#a1c4fd" />
+                <stop offset="100%" stop-color="#c2e9fb" />
+            </linearGradient>
+            <linearGradient id="blobGrad2" x1="1" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#d4fc79" />
+                <stop offset="100%" stop-color="#96e6a1" />
+            </linearGradient>
+        </defs>
+        <g>
+            <ellipse cx="230" cy="140" rx="180" ry="95" fill="url(#blobGrad1)">
+                <animate attributeName="cx" values="230;260;230" dur="8s" repeatCount="indefinite"/>
+                <animate attributeName="cy" values="140;160;140" dur="9s" repeatCount="indefinite"/>
+            </ellipse>
+            <ellipse cx="590" cy="420" rx="160" ry="85" fill="url(#blobGrad2)">
+                <animate attributeName="cx" values="590;610;590" dur="10s" repeatCount="indefinite"/>
+                <animate attributeName="cy" values="420;440;420" dur="12s" repeatCount="indefinite"/>
+            </ellipse>
+        </g>
+    </svg>
+
     <div id="popup">
         <div id="popupContent">
             <p>Welcome to <b>mathpunch AI</b>!</p>
@@ -327,10 +377,7 @@
             messageElement.appendChild(innerDiv);
             chatContainer.appendChild(messageElement);
             chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            if (save) {
-                saveMessage(message, sender);
-            }
+            if (save) saveMessage(message, sender);
         }
 
         userInput.addEventListener('keydown', function(e) {
