@@ -145,7 +145,12 @@
             transition: background 0.18s, box-shadow 0.18s, color 0.18s;
             letter-spacing: 0.01em;
         }
-        button:hover, button:focus {
+        button[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.2) brightness(0.7);
+        }
+        button:hover:enabled, button:focus:enabled {
             background: linear-gradient(135deg, #5ee3ff 0%, #1770fa 80%);
             color: #151820;
             box-shadow: 0 4px 24px 0 #5ee3ff44;
@@ -213,6 +218,23 @@
             background: transparent;
         }
 
+        #cooldownMsg {
+            color: #5ee3ff;
+            font-size: 1.04rem;
+            text-align: center;
+            margin-bottom: 12px;
+            min-height: 18px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            transition: opacity 0.2s;
+            opacity: 0;
+            pointer-events: none;
+            user-select: none;
+        }
+        #cooldownMsg.active {
+            opacity: 1;
+        }
+
         @media (max-width: 700px) {
             .container, #chatContainer, #userInput { max-width: 99vw; }
             #chatContainer { padding: 18px 4vw; }
@@ -245,8 +267,9 @@
         </div>
         <h1>mathpunch AI</h1>
         <div id="chatContainer"></div>
+        <div id="cooldownMsg"></div>
         <textarea id="userInput" placeholder="Type your message here..."></textarea>
-        <button onclick="sendMessage()">Send</button>
+        <button id="sendBtn" onclick="sendMessage()">Send</button>
     </div>
 
     <script>
@@ -262,6 +285,32 @@
         const STORAGE_KEY = 'mathpunch_ai_chat';
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const cooldownMsg = document.getElementById('cooldownMsg');
+
+        let isCooldown = false;
+        let cooldownTimeout = null;
+
+        function setCooldown(seconds) {
+            isCooldown = true;
+            sendBtn.disabled = true;
+            let remaining = seconds;
+            cooldownMsg.textContent = `Please wait ${remaining} second${remaining !== 1 ? 's' : ''} before sending another message...`;
+            cooldownMsg.classList.add("active");
+
+            cooldownTimeout = setInterval(() => {
+                remaining--;
+                if (remaining > 0) {
+                    cooldownMsg.textContent = `Please wait ${remaining} second${remaining !== 1 ? 's' : ''} before sending another message...`;
+                } else {
+                    clearInterval(cooldownTimeout);
+                    isCooldown = false;
+                    sendBtn.disabled = false;
+                    cooldownMsg.textContent = "";
+                    cooldownMsg.classList.remove("active");
+                }
+            }, 1000);
+        }
 
         function loadMessages() {
             chatContainer.innerHTML = '';
@@ -287,6 +336,8 @@
         const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
         async function sendMessage() {
+            if (isCooldown) return;
+
             const userMessage = userInput.value.trim();
 
             if (!userMessage) {
@@ -296,6 +347,9 @@
 
             appendMessage(userMessage, 'user');
             saveMessage(userMessage, 'user');
+
+            // Start cooldown immediately after sending message
+            setCooldown(3);
 
             const chatHistory = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
             const messages = chatHistory
