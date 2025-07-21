@@ -8,43 +8,43 @@
     <style>
         html, body {
             height: 100%;
-            padding: 0;
             margin: 0;
+            padding: 0;
         }
         body {
-            font-family: 'Inter', 'Manrope', Arial, sans-serif;
+            font-family: 'Manrope', 'Inter', Arial, sans-serif;
             min-height: 100vh;
-            color: #f7f9fa;
+            color: #e9ecf1;
             margin: 0;
             padding: 0;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Animated gradient background */
+        /* Animated dark gradient background */
         body::before {
             content: "";
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -2;
-            background: linear-gradient(120deg, #232526 0%, #8ec5fc 40%, #e0c3fc 80%, #414345 100%);
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(120deg, #10141a 0%, #23243a 60%, #16181f 100%);
             background-size: 200% 200%;
-            animation: gradientBG 15s ease-in-out infinite;
+            animation: darkGradientBG 17s ease-in-out infinite;
         }
-        @keyframes gradientBG {
+        @keyframes darkGradientBG {
             0% {background-position: 0% 50%;}
             50% {background-position: 100% 50%;}
             100% {background-position: 0% 50%;}
         }
 
-        /* Floating blob SVG overlay */
+        /* Subtle animated SVG blobs for depth */
         .blob-bg {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: -1;
-            opacity: 0.33;
-            filter: blur(8px) saturate(120%);
+            opacity: 0.17;
+            filter: blur(18px) saturate(140%);
         }
 
         .container {
@@ -57,35 +57,35 @@
         }
 
         h1 {
-            margin-bottom: 8px;
-            font-size: 2.8rem;
-            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: 800;
             text-align: center;
-            color: #fff;
-            text-shadow: 0 2px 32px rgba(0,0,0,0.15);
-            letter-spacing: 1px;
+            color: #f3f6fa;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 40px #000b  ;
         }
 
         #chatContainer {
             width: 100%;
-            max-width: 550px;
-            min-height: 240px;
-            height: 57vh;
+            max-width: 560px;
+            min-height: 220px;
+            height: 56vh;
             overflow-y: auto;
-            padding: 28px 18px 24px 18px;
-            background: rgba(36,44,58,0.60);
-            border-radius: 30px;
-            box-shadow: 0 12px 48px 0 rgba(24,28,37,0.21);
-            border: 1.5px solid rgba(255,255,255,0.09);
-            backdrop-filter: blur(16px) saturate(140%);
+            padding: 28px 20px 24px 20px;
+            background: rgba(16, 20, 32, 0.84);
+            border-radius: 32px;
+            box-shadow: 0 12px 48px 0 #000a, 0 1.5px 0 #1f2638;
+            border: 1.5px solid rgba(74,86,117,0.18);
+            backdrop-filter: blur(18px) saturate(180%);
             margin-bottom: 24px;
             transition: box-shadow 0.2s;
         }
 
         .message {
             margin-bottom: 19px;
-            font-size: 1.11rem;
-            line-height: 1.68;
+            font-size: 1.13rem;
+            line-height: 1.7;
             word-break: break-word;
             display: flex;
         }
@@ -97,46 +97,48 @@
             max-width: 76%;
             padding: 14px 20px;
             border-radius: 18px 18px 16px 5px;
-            box-shadow: 0 2px 16px 0 rgba(0,0,0,0.09);
+            box-shadow: 0 2px 18px 0 rgba(0,0,0,0.13);
             font-weight: 400;
             white-space: pre-wrap;
             font-family: 'Manrope', 'Inter', sans-serif;
             transition: background 0.3s;
         }
         .message.user div {
-            background: linear-gradient(120deg, #b5fffc 0%, #f3d6ff 100%);
-            color: #2b2b2b;
+            background: linear-gradient(120deg, #2e3856 0%, #23243a 100%);
+            color: #c7dbff;
             border-bottom-right-radius: 4px;
             align-self: flex-end;
+            border: 1.5px solid #2b3552;
         }
         .message.ai div {
-            background: linear-gradient(120deg, #353b48 0%, #7f7fd5 100%);
-            color: #f7f9fa;
+            background: linear-gradient(120deg, #16181f 0%, #23243a 100%);
+            color: #e9ecf1;
             border-bottom-left-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1.5px solid #23243a;
             align-self: flex-start;
         }
 
         #userInput {
             width: 100%;
-            max-width: 550px;
+            max-width: 560px;
             min-height: 52px;
             max-height: 140px;
             padding: 16px 18px;
             font-size: 1.13rem;
-            background: rgba(255,255,255,0.13);
-            color: #f7f9fa;
-            border: 1.5px solid rgba(255,255,255,0.15);
-            border-radius: 20px;
+            background: rgba(28,32,48,0.77);
+            color: #e9ecf1;
+            border: 1.5px solid #23243a;
+            border-radius: 22px;
             margin-bottom: 10px;
             resize: vertical;
             outline: none;
-            box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10);
+            box-shadow: 0 2px 18px 0 rgba(0,0,0,0.13);
             transition: border 0.2s, background 0.2s;
         }
         #userInput:focus {
-            border: 1.5px solid #8ec5fc;
-            background: rgba(255,255,255,0.22);
+            border: 1.5px solid #5ee3ff;
+            background: rgba(28,32,48,0.97);
+            box-shadow: 0 0 0 2px #5ee3ff44;
         }
 
         button {
@@ -144,19 +146,19 @@
             font-size: 1.14rem;
             font-weight: 700;
             cursor: pointer;
-            background: linear-gradient(135deg, #7f7fd5 0%, #86a8e7 60%, #91eac9 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #2e4b7c 0%, #23243a 80%);
+            color: #e9ecf1;
             border: none;
-            border-radius: 18px;
+            border-radius: 22px;
             margin: 0 6px;
-            box-shadow: 0 2px 14px 0 rgba(143,188,255,0.11);
-            transition: background 0.19s, box-shadow 0.19s, color 0.19s;
+            box-shadow: 0 2px 14px 0 #000a;
+            transition: background 0.18s, box-shadow 0.18s, color 0.18s;
             letter-spacing: 0.01em;
         }
         button:hover, button:focus {
-            background: linear-gradient(135deg, #86a8e7 0%, #7f7fd5 80%);
-            color: #f3d6ff;
-            box-shadow: 0 4px 24px 0 rgba(143,188,255,0.22);
+            background: linear-gradient(135deg, #5ee3ff 0%, #1770fa 80%);
+            color: #151820;
+            box-shadow: 0 4px 24px 0 #5ee3ff44;
             outline: none;
         }
 
@@ -164,8 +166,8 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            margin-bottom: 34px;
-            margin-top: 16px;
+            margin-bottom: 36px;
+            margin-top: 18px;
             gap: 8px;
         }
 
@@ -174,38 +176,38 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(34, 40, 49, 0.78);
-            color: white;
+            background: rgba(10, 14, 22, 0.93);
+            color: #e9ecf1;
             justify-content: center;
             align-items: center;
             z-index: 9999;
             transition: background 0.2s;
-            backdrop-filter: blur(2.5px);
+            backdrop-filter: blur(3px);
         }
         #popupContent {
-            background: rgba(34, 40, 49, 0.98);
-            padding: 36px 24px 32px 24px;
-            border-radius: 28px;
+            background: rgba(25, 30, 44, 0.98);
+            padding: 38px 24px 34px 24px;
+            border-radius: 32px;
             text-align: center;
             font-size: 1.23rem;
             width: 84%;
             max-width: 520px;
-            box-shadow: 0 10px 32px 0 rgba(0,0,0,0.32);
+            box-shadow: 0 10px 32px 0 #000b;
         }
         #popup button {
-            background: linear-gradient(135deg, #8ec5fc 0%, #e0c3fc 100%);
-            color: #232526;
+            background: linear-gradient(135deg, #5ee3ff 0%, #1770fa 100%);
+            color: #181c22;
             border: none;
             padding: 13px 30px;
-            border-radius: 14px;
+            border-radius: 15px;
             font-size: 1.07rem;
             font-weight: 600;
             margin-top: 28px;
             cursor: pointer;
-            box-shadow: 0 2px 10px 0 rgba(143,188,255,0.10);
+            box-shadow: 0 2px 10px 0 #5ee3ff33;
         }
         #popup button:hover {
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            background: linear-gradient(135deg, #1770fa 0%, #5ee3ff 100%);
         }
 
         /* Scrollbar styling */
@@ -214,8 +216,11 @@
             background: transparent;
         }
         #chatContainer::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.09);
-            border-radius: 5px;
+            background: #23243a;
+            border-radius: 7px;
+        }
+        #chatContainer::-webkit-scrollbar-track {
+            background: transparent;
         }
 
         @media (max-width: 700px) {
@@ -225,7 +230,7 @@
         @media (max-width: 480px) {
             h1 { font-size: 2.04rem; }
             #chatContainer {
-                min-height: 180px;
+                min-height: 130px;
                 padding: 7vw 2vw;
             }
             button, #popup button {
@@ -237,26 +242,26 @@
     </style>
 </head>
 <body>
-    <!-- Floating animated SVG blobs for extra modern feel -->
+    <!-- Animated SVG blobs for dark accent -->
     <svg class="blob-bg" viewBox="0 0 800 600" width="100%" height="100%" preserveAspectRatio="none">
         <defs>
             <linearGradient id="blobGrad1" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#a1c4fd" />
-                <stop offset="100%" stop-color="#c2e9fb" />
+                <stop offset="0%" stop-color="#1770fa" />
+                <stop offset="100%" stop-color="#5ee3ff" />
             </linearGradient>
             <linearGradient id="blobGrad2" x1="1" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#d4fc79" />
-                <stop offset="100%" stop-color="#96e6a1" />
+                <stop offset="0%" stop-color="#10141a" />
+                <stop offset="100%" stop-color="#23243a" />
             </linearGradient>
         </defs>
         <g>
-            <ellipse cx="230" cy="140" rx="180" ry="95" fill="url(#blobGrad1)">
+            <ellipse cx="230" cy="120" rx="180" ry="95" fill="url(#blobGrad1)">
                 <animate attributeName="cx" values="230;260;230" dur="8s" repeatCount="indefinite"/>
-                <animate attributeName="cy" values="140;160;140" dur="9s" repeatCount="indefinite"/>
+                <animate attributeName="cy" values="120;140;120" dur="10s" repeatCount="indefinite"/>
             </ellipse>
-            <ellipse cx="590" cy="420" rx="160" ry="85" fill="url(#blobGrad2)">
-                <animate attributeName="cx" values="590;610;590" dur="10s" repeatCount="indefinite"/>
-                <animate attributeName="cy" values="420;440;420" dur="12s" repeatCount="indefinite"/>
+            <ellipse cx="620" cy="500" rx="160" ry="90" fill="url(#blobGrad2)">
+                <animate attributeName="cx" values="620;640;620" dur="11s" repeatCount="indefinite"/>
+                <animate attributeName="cy" values="500;530;500" dur="13s" repeatCount="indefinite"/>
             </ellipse>
         </g>
     </svg>
