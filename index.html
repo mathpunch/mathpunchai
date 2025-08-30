@@ -332,7 +332,7 @@
             }
         }
 
-        const API_KEY = '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';
+        const API_KEY = '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';
         const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
         async function sendMessage() {
@@ -359,7 +359,7 @@
             messages.push({ role: 'user', content: userMessage });
 
             const requestBody = {
-                model: 'moonshotai/kimi-k2-instruct',
+                model: 'qwen/qwen3-32b',
                 messages: messages,
                 temperature: 1,
                 max_tokens: 1024,
